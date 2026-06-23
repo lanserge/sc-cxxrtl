@@ -1,0 +1,22 @@
+# SPDX-License-Identifier: ISC
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sc-cxxrtl"
+version = "0.0.0"
+description = "SiliconCompiler glue for the CXXRTL (Yosys) cocotb simulator, via cxxrtl-vpi"
+readme = "README.md"
+requires-python = ">=3.9"
+license = "ISC"
+authors = [{ name = "sc-cxxrtl contributors" }]
+keywords = ["siliconcompiler", "cxxrtl", "yosys", "cocotb", "simulation"]
+dependencies = [
+    "siliconcompiler",
+    "cxxrtl-vpi",
+    "cocotb>=2.0",
+]
+
+[tool.setuptools]
+packages = ["sc_cxxrtl"]
