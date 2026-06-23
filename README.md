@@ -41,6 +41,20 @@ compile   (cxxrtl/cocotb_compile)  RTL -> CXXRTL model -> link cxxrtl-vpi + coco
 simulate  (cxxrtl/exec_cocotb)     run the executable under cocotb -> results.xml
 ```
 
+### Init fuzzing (X-dependence detection)
+
+CXXRTL is 2-state and inits flop state to 0, so a design that secretly relies on
+uninitialized state passes silently. The compile task exposes Verilator-style
+`--x-initial unique` fuzzing:
+
+```python
+from sc_cxxrtl import CxxrtlCocotbCompileTask
+CxxrtlCocotbCompileTask.find_task(proj).set_randomize_init(True, seed=42)
+```
+
+This seeds uninitialized flops with `setundef -init -random`; vary the seed
+across runs to expose X-dependence.
+
 A complete, runnable example is in [`examples/counter/`](examples/counter)
 (`python make.py`). It passes:
 

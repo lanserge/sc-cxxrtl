@@ -22,6 +22,19 @@ def test_flow_construction():
     assert exec_task.task() == "exec_cocotb"
 
 
+def test_randomize_init_param():
+    """The init-fuzzing flow option is exposed on the compile task."""
+    from sc_cxxrtl import CxxrtlCocotbCompileTask
+
+    task = CxxrtlCocotbCompileTask()
+    assert task.get("var", "randomize_init") is False
+    assert task.get("var", "init_seed") == 1
+
+    task.set_randomize_init(True, seed=42)
+    assert task.get("var", "randomize_init") is True
+    assert task.get("var", "init_seed") == 42
+
+
 @pytest.mark.eda
 def test_example_end_to_end():
     """Run the counter example through SC -> cocotb on CXXRTL (needs yosys + cocotb)."""

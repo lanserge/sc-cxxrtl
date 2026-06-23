@@ -3,6 +3,8 @@
 
 import sys
 
+from typing import Optional
+
 from siliconcompiler import Task
 
 
@@ -16,17 +18,44 @@ class CxxrtlCocotbCompileTask(Task):
     the downstream exec task runs it under cocotb.
     '''
 
+    def __init__(self):
+        super().__init__()
+
+        self.add_parameter(
+            "randomize_init", "bool",
+            "if true, randomize uninitialized flip-flop state (Yosys "
+            "'setundef -init -random'), the CXXRTL analogue of Verilator's "
+            "--x-initial unique. CXXRTL otherwise inits to 0, hiding designs "
+            "that rely on uninitialized state; vary [init_seed] across runs to "
+            "expose them.",
+            defvalue=False)
+        self.add_parameter(
+            "init_seed", "int",
+            "integer seed for [randomize_init].",
+            defvalue=1)
+
     def tool(self):
         return "cxxrtl"
 
     def task(self):
         return "cocotb_compile"
 
+    def set_randomize_init(self, enable: bool = True, seed: Optional[int] = None,
+                           step: Optional[str] = None, index: Optional[str] = None):
+        """Enable randomized flop-init fuzzing, optionally setting the seed."""
+        self.set("var", "randomize_init", enable, step=step, index=index)
+        if seed is not None:
+            self.set("var", "init_seed", seed, step=step, index=index)
+
     def setup(self):
         super().setup()
 
         self.set_threads()
         self.add_output_file(ext="vexe")
+
+        self.add_required_key("var", "randomize_init")
+        if self.get("var", "randomize_init"):
+            self.add_required_key("var", "init_seed")
 
         self.add_required_key("option", "design")
         self.add_required_key("option", "fileset")
@@ -56,7 +85,13 @@ class CxxrtlCocotbCompileTask(Task):
             return 1
 
         top = self.design_topmodule
+        randomize_init = self.get("var", "randomize_init")
+        init_seed = self.get("var", "init_seed")
+        if randomize_init:
+            self.logger.info(f"randomizing flop init (seed {init_seed})")
+
         # SC runs run() in-process, so sys.executable is the SC interpreter —
         # the cocotb whose VPI we link must be the one we run the sim under.
-        build_cocotb_sim(sources, top, f"outputs/{top}.vexe", python=sys.executable)
+        build_cocotb_sim(sources, top, f"outputs/{top}.vexe", python=sys.executable,
+                         randomize_init=randomize_init, init_seed=init_seed)
         return 0
