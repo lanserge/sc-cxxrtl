@@ -47,6 +47,23 @@ class CxxrtlCocotbCompileTask(Task):
         if seed is not None:
             self.set("var", "init_seed", seed, step=step, index=index)
 
+    def _rtl_filesets(self):
+        """Filesets to compile RTL from.
+
+        If the design defines a fileset named after the tool ("cxxrtl"), source
+        RTL from that fileset's subtree (it should ``add_depfileset(self, 'rtl')``
+        to pull in the base RTL) — mirroring how SiliconCompiler's verilator and
+        icarus tasks consume their own tool-named fileset. This keeps tool-specific
+        filesets (e.g. a "verilator" fileset carrying DPI/switchboard shims) out of
+        the CXXRTL build. When the design has no "cxxrtl" fileset, fall back to all
+        active filesets (``option,fileset`` + their dependencies).
+        """
+        design = self.project.design
+        tool = self.tool()
+        if design.has_fileset(tool):
+            return design.get_fileset(tool)
+        return self.project.get_filesets()
+
     def setup(self):
         super().setup()
 
@@ -62,7 +79,7 @@ class CxxrtlCocotbCompileTask(Task):
         if self.project.get("option", "alias"):
             self.add_required_key("option", "alias")
 
-        for lib, fileset in self.project.get_filesets():
+        for lib, fileset in self._rtl_filesets():
             if lib.has_idir(fileset):
                 self.add_required_key(lib, "fileset", fileset, "idir")
             if lib.get("fileset", fileset, "define"):
@@ -76,7 +93,7 @@ class CxxrtlCocotbCompileTask(Task):
         from cxxrtl_vpi.cocotb_build import build_cocotb_sim
 
         sources = []
-        for lib, fileset in self.project.get_filesets():
+        for lib, fileset in self._rtl_filesets():
             sources.extend(lib.get_file(fileset=fileset, filetype="systemverilog"))
             sources.extend(lib.get_file(fileset=fileset, filetype="verilog"))
 

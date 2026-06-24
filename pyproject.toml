@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sc-cxxrtl"
-version = "0.0.1"
+version = "0.0.2"
 description = "A CXXRTL (Yosys) cocotb simulator for SiliconCompiler — installed, not patched in"
 readme = "README.md"
 requires-python = ">=3.9"

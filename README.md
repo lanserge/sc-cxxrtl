@@ -57,6 +57,27 @@ compile   (cxxrtl/cocotb_compile)  RTL -> CXXRTL model -> link cxxrtl-vpi + coco
 simulate  (cxxrtl/exec_cocotb)     run the executable under cocotb -> results.xml
 ```
 
+### Tool-named fileset
+
+Like SiliconCompiler's built-in `verilator`/`icarus` tasks, the compile task is
+**tool-fileset-aware**: if the design defines a fileset named after the tool
+(`cxxrtl`), RTL is sourced from that fileset's subtree. Give it
+`add_depfileset(self, "rtl")` to pull in the base RTL, and put any
+CXXRTL-specific includes/defines there:
+
+```python
+with design.active_fileset("rtl"):
+    design.set_topmodule("dut")
+    design.add_file("dut.v")
+with design.active_fileset("cxxrtl"):
+    design.add_depfileset(design, "rtl")  # cxxrtl depends on rtl
+```
+
+This keeps a sibling `verilator` fileset (e.g. one carrying DPI/switchboard
+shims) out of the CXXRTL build — the same fileset convention used across the SC
+ecosystem. When the design has no `cxxrtl` fileset, all active filesets are used
+(unchanged behavior).
+
 ### Init fuzzing (X-dependence detection)
 
 CXXRTL is 2-state and inits flop state to 0, so a design that secretly relies on
