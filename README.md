@@ -1,5 +1,8 @@
 # sc-cxxrtl
 
+[![PyPI](https://img.shields.io/pypi/v/sc-cxxrtl)](https://pypi.org/project/sc-cxxrtl/)
+[![License: ISC](https://img.shields.io/badge/license-ISC-blue.svg)](LICENSE)
+
 **A CXXRTL cocotb simulator for [SiliconCompiler](https://github.com/siliconcompiler/siliconcompiler) — installed, not patched in.**
 
 `pip install sc-cxxrtl` adds the Yosys **CXXRTL** engine as a cocotb simulator to
@@ -16,17 +19,15 @@ Built on:
 
 ## Install
 
-Not on PyPI yet — install both packages from source (cocotb requires Python
-≤ 3.13):
-
 ```sh
-pip install git+https://github.com/lanserge/cxxrtl-vpi
-pip install git+https://github.com/lanserge/sc-cxxrtl
+pip install sc-cxxrtl
 ```
 
-You also need **Yosys** (`yosys` / `yosys-config`) and a **C++ compiler** on
-`PATH` — the same external precondition as every SiliconCompiler simulator. See
-[cxxrtl-vpi](https://github.com/lanserge/cxxrtl-vpi) for toolchain details.
+This pulls in `cxxrtl-vpi`, `cocotb`, and `siliconcompiler`. Requires **Python
+≤ 3.13** (cocotb's cap), plus **Yosys** (`yosys` / `yosys-config`) and a **C++
+compiler** on `PATH` — the same external precondition as every SiliconCompiler
+simulator. (Latest from git:
+`pip install git+https://github.com/lanserge/sc-cxxrtl`.)
 
 ## Use
 
