@@ -17,5 +17,5 @@ from sc_cxxrtl.compile import CxxrtlCocotbCompileTask
 from sc_cxxrtl.exec import CxxrtlCocotbExecTask
 from sc_cxxrtl.flow import CxxrtlDVFlow
 
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 __all__ = ["CxxrtlCocotbCompileTask", "CxxrtlCocotbExecTask", "CxxrtlDVFlow"]

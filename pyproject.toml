@@ -5,18 +5,29 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sc-cxxrtl"
-version = "0.0.0"
-description = "SiliconCompiler glue for the CXXRTL (Yosys) cocotb simulator, via cxxrtl-vpi"
+version = "0.0.1"
+description = "A CXXRTL (Yosys) cocotb simulator for SiliconCompiler — installed, not patched in"
 readme = "README.md"
 requires-python = ">=3.9"
 license = "ISC"
 authors = [{ name = "sc-cxxrtl contributors" }]
-keywords = ["siliconcompiler", "cxxrtl", "yosys", "cocotb", "simulation"]
+keywords = ["siliconcompiler", "cxxrtl", "yosys", "cocotb", "simulation", "verification", "eda"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering :: Electronic Design Automation (EDA)",
+    "Topic :: Software Development :: Testing",
+]
 dependencies = [
     "siliconcompiler",
     "cxxrtl-vpi",
     "cocotb>=2.0",
 ]
+
+[project.urls]
+Homepage = "https://github.com/lanserge/sc-cxxrtl"
+Repository = "https://github.com/lanserge/sc-cxxrtl"
 
 [tool.setuptools]
 packages = ["sc_cxxrtl"]
