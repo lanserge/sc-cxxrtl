@@ -55,6 +55,15 @@ CxxrtlCocotbCompileTask.find_task(proj).set_randomize_init(True, seed=42)
 This seeds uninitialized flops with `setundef -init -random`; vary the seed
 across runs to expose X-dependence.
 
+### Waveform tracing
+
+Enable a VCD dump (written to `reports/<design>.vcd`) on the exec task:
+
+```python
+from sc_cxxrtl import CxxrtlCocotbExecTask
+CxxrtlCocotbExecTask.find_task(proj).set_trace(True)
+```
+
 A complete, runnable example is in [`examples/counter/`](examples/counter)
 (`python make.py`). It passes:
 

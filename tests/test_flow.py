@@ -35,6 +35,16 @@ def test_randomize_init_param():
     assert task.get("var", "init_seed") == 42
 
 
+def test_trace_param():
+    """The VCD trace flow option is exposed on the exec task."""
+    from sc_cxxrtl import CxxrtlCocotbExecTask
+
+    task = CxxrtlCocotbExecTask()
+    assert task.get("var", "trace") is False
+    task.set_trace(True)
+    assert task.get("var", "trace") is True
+
+
 @pytest.mark.eda
 def test_example_end_to_end():
     """Run the counter example through SC -> cocotb on CXXRTL (needs yosys + cocotb)."""
