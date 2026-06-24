@@ -8,10 +8,25 @@ SiliconCompiler **without modifying SiliconCompiler**. SC executes whatever
 so no SC source change is needed.
 
 Built on:
-- [**cxxrtl-vpi**](../cxxrtl-vpi) — the engine adapter that makes cocotb drive a
-  CXXRTL model (an IEEE-1364 VPI implementation over `cxxrtl_capi`),
+- [**cxxrtl-vpi**](https://github.com/lanserge/cxxrtl-vpi) — the engine adapter
+  that makes cocotb drive a CXXRTL model (an IEEE-1364 VPI implementation over
+  `cxxrtl_capi`),
 - **cocotb** ≥ 2.0 — the Python testbench framework,
 - **Yosys** — `write_cxxrtl` + a C++ compiler (external, like every SC simulator).
+
+## Install
+
+Not on PyPI yet — install both packages from source (cocotb requires Python
+≤ 3.13):
+
+```sh
+pip install git+https://github.com/lanserge/cxxrtl-vpi
+pip install git+https://github.com/lanserge/sc-cxxrtl
+```
+
+You also need **Yosys** (`yosys` / `yosys-config`) and a **C++ compiler** on
+`PATH` — the same external precondition as every SiliconCompiler simulator. See
+[cxxrtl-vpi](https://github.com/lanserge/cxxrtl-vpi) for toolchain details.
 
 ## Use
 
